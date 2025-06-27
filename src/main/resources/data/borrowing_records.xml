@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<borrowingRecords>
+    <record>
+        <recordId>4</recordId>
+        <borrowerId>1</borrowerId>
+        <bookId>104</bookId>
+        <issuedDate>2025-05-28</issuedDate>
+        <dueDate>2025-06-11</dueDate>
+        <returnedDate>2025-06-11</returnedDate>
+        <finePaid>false</finePaid>
+    </record>
+    <record>
+        <recordId>5</recordId>
+        <borrowerId>2</borrowerId>
+        <bookId>105</bookId>
+        <issuedDate>2025-06-07</issuedDate>
+        <dueDate>2025-06-22</dueDate>
+        <returnedDate>2025-06-22</returnedDate>
+        <finePaid>true</finePaid>
+    </record>
+</borrowingRecords>

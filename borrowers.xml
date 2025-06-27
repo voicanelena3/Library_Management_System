@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<borrowers>
+    <borrower>
+        <id>1</id>
+        <name>Alice</name>
+        <password>password123</password>
+        <address>123 Main St</address>
+        <phoneNumber>1234567890</phoneNumber>
+        <email>alice@example.com</email>
+        <role>Borrower</role>
+        <borrowedLoans/>
+    </borrower>
+    <borrower>
+        <id>2</id>
+        <name>Bob</name>
+        <password>secret456</password>
+        <address>456 Elm St</address>
+        <phoneNumber>987654321</phoneNumber>
+        <email>bob@example.com</email>
+        <role>Borrower</role>
+        <borrowedLoans/>
+    </borrower>
+    <borrower>
+        <id>3</id>
+        <name>Charlie</name>
+        <password>pass123</password>
+        <address>789 Oak Ave</address>
+        <phoneNumber>5551112222</phoneNumber>
+        <email>charlie@example.com</email>
+        <role>Borrower</role>
+        <borrowedLoans/>
+    </borrower>
+    <borrower>
+        <id>4</id>
+        <name>David</name>
+        <password>secure_pwd</password>
+        <address>101 Pine Lane</address>
+        <phoneNumber>9998887777</phoneNumber>
+        <email>david@example.com</email>
+        <role>Borrower</role>
+        <borrowedLoans/>
+    </borrower>
+    <borrower>
+        <id>101</id>
+        <name>Librarian Admin</name>
+        <password>admin123</password>
+        <address>Library Office</address>
+        <phoneNumber>1112223333</phoneNumber>
+        <email>admin@library.com</email>
+        <role>Librarian</role>
+        <borrowedLoans/>
+    </borrower>
+    <borrower>
+        <id>102</id>
+        <name>Jane Smith</name>
+        <password>libpass</password>
+        <address>City Hall</address>
+        <phoneNumber>4445556666</phoneNumber>
+        <email>jane@library.com</email>
+        <role>Librarian</role>
+        <borrowedLoans/>
+    </borrower>
+</borrowers>

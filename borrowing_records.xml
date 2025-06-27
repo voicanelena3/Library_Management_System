@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<borrowingRecords>
+    <borrowingRecord>
+        <recordId>1</recordId>
+        <borrowerId>1</borrowerId>
+        <bookId>101</bookId>
+        <borrowDate>2025-06-15</borrowDate>
+        <dueDate>2025-07-05</dueDate>
+        <returnDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    </borrowingRecord>
+    <borrowingRecord>
+        <recordId>2</recordId>
+        <borrowerId>2</borrowerId>
+        <bookId>102</bookId>
+        <borrowDate>2025-06-20</borrowDate>
+        <dueDate>2025-07-10</dueDate>
+        <returnDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    </borrowingRecord>
+    <borrowingRecord>
+        <recordId>3</recordId>
+        <borrowerId>1</borrowerId>
+        <bookId>103</bookId>
+        <borrowDate>2025-06-23</borrowDate>
+        <dueDate>2025-07-15</dueDate>
+        <returnDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    </borrowingRecord>
+    <borrowingRecord>
+        <recordId>4</recordId>
+        <borrowerId>1</borrowerId>
+        <bookId>104</bookId>
+        <borrowDate>2025-06-18</borrowDate>
+        <dueDate>2025-07-08</dueDate>
+        <returnDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    </borrowingRecord>
+    <borrowingRecord>
+        <recordId>5</recordId>
+        <borrowerId>1</borrowerId>
+        <bookId>105</bookId>
+        <borrowDate>2025-06-24</borrowDate>
+        <dueDate>2025-07-24</dueDate>
+        <returnDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    </borrowingRecord>
+    <borrowingRecord>
+        <recordId>6</recordId>
+        <borrowerId>2</borrowerId>
+        <bookId>106</bookId>
+        <borrowDate>2025-06-22</borrowDate>
+        <dueDate>2025-07-12</dueDate>
+        <returnDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    </borrowingRecord>
+</borrowingRecords>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<borrowers>
+    <borrower>
+        <id>1</id>
+        <name>Alice</name>
+        <password>password123</password>
+        <address>123 Main St</address>
+        <phoneNumber>1234567890</phoneNumber>
+        <email>alice@example.com</email>
+        <role>Borrower</role>
+        <borrowedLoans>
+            <loan>
+                <recordId>1</recordId>
+                <loanedBook>
+                    <bookID>101</bookID>
+                    <title>The Lord of the Rings</title>
+                    <author>J.R.R. Tolkien</author>
+                    <genre>Fantasy</genre>
+                    <isBorrowed>true</isBorrowed>
+                </loanedBook>
+                <issuedDate>2025-06-17</issuedDate>
+                <dueDate>2025-07-01</dueDate>
+                <returnedDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+                <finePaid>false</finePaid>
+            </loan>
+            <loan>
+                <recordId>2</recordId>
+                <loanedBook>
+                    <bookID>103</bookID>
+                    <title>1984</title>
+                    <author>George Orwell</author>
+                    <genre>Dystopian</genre>
+                    <isBorrowed>true</isBorrowed>
+                </loanedBook>
+                <issuedDate>2025-06-25</issuedDate>
+                <dueDate>2025-07-09</dueDate>
+                <returnedDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+                <finePaid>false</finePaid>
+            </loan>
+        </borrowedLoans>
+    </borrower>
+    <borrower>
+        <id>2</id>
+        <name>Bob</name>
+        <password>secret456</password>
+        <address>456 Elm St</address>
+        <phoneNumber>987654321</phoneNumber>
+        <email>bob@example.com</email>
+        <role>Borrower</role>
+        <borrowedLoans>
+            <loan>
+                <recordId>3</recordId>
+                <loanedBook>
+                    <bookID>102</bookID>
+                    <title>Pride and Prejudice</title>
+                    <author>Jane Austen</author>
+                    <genre>Romance</genre>
+                    <isBorrowed>true</isBorrowed>
+                </loanedBook>
+                <issuedDate>2025-06-22</issuedDate>
+                <dueDate>2025-07-06</dueDate>
+                <returnedDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+                <finePaid>false</finePaid>
+            </loan>
+        </borrowedLoans>
+    </borrower>
+    <borrower>
+        <id>9999</id>
+        <name>Librarian</name>
+        <password>librarianpass</password>
+        <address>Library HQ</address>
+        <phoneNumber>1122334455</phoneNumber>
+        <email>librarian@example.com</email>
+        <role>Librarian</role>
+        <borrowedLoans/>
+    </borrower>
+</borrowers>

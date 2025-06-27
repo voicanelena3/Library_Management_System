@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<books>
+    <book>
+        <bookID>104</bookID>
+        <title>To Kill a Mockingbird</title>
+        <author>Harper Lee</author>
+        <genre>Fiction</genre>
+        <isBorrowed>false</isBorrowed>
+    </book>
+    <book>
+        <bookID>105</bookID>
+        <title>The Great Gatsby</title>
+        <author>F. Scott Fitzgerald</author>
+        <genre>Classic</genre>
+        <isBorrowed>false</isBorrowed>
+    </book>
+    <book>
+        <bookID>106</bookID>
+        <title>Dune</title>
+        <author>Frank Herbert</author>
+        <genre>Science Fiction</genre>
+        <isBorrowed>false</isBorrowed>
+    </book>
+</books>

@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+
+Name: library/ui/LibrarianMainFrame.class
+Java-Bean: True
+
+Name: library/ui/BorrowerMainFrame.class
+Java-Bean: True
+
+Name: library/ui/LoginFrame.class
+Java-Bean: True

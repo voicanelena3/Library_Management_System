@@ -5,15 +5,15 @@ import library.model.Borrower;
 import library.model.Loan;
 import library.util.BookXMLHandler;
 import library.util.BorrowerXMLHandler;
+import library.util.ReportGenerator; // Importă noua clasă
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File; // Import File
-import java.io.FileInputStream; // Import FileInputStream
-import java.io.InputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ public class LibrarianMainFrame extends JFrame {
     private DefaultTableModel bookTableModel;
     private DefaultTableModel borrowerTableModel;
     private DefaultTableModel loanTableModel;
+    private JTable loanTable; // CORECTAT: Mutat la nivel de clasă
 
     private List<Book> allBooks = new ArrayList<>();
     private List<Borrower> allBorrowers = new ArrayList<>();
@@ -33,10 +34,7 @@ public class LibrarianMainFrame extends JFrame {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private final Color babyPink = new Color(255, 204, 204);
 
-    // Define file paths as constants
-    // private static final String BOOKS_FILE_PATH = "books.xml"; // No longer needed for loading
     private static final String BORROWERS_FILE_PATH = "borrowers.xml";
-
 
     public LibrarianMainFrame() {
         setTitle("Librarian Main Panel");
@@ -84,21 +82,20 @@ public class LibrarianMainFrame extends JFrame {
 
     private void loadAllData() {
         try {
-            // --- MODIFIED: Use a hardcoded list of books instead of loading from a file ---
+            // Use a hardcoded list of books as per previous request
             allBooks = new ArrayList<>();
             allBooks.add(new Book(104, "To Kill a Mockingbird", "Harper Lee", "Fiction"));
             allBooks.add(new Book(105, "The Great Gatsby", "F. Scott Fitzgerald", "Classic"));
             allBooks.add(new Book(106, "Dune", "Frank Herbert", "Science Fiction"));
             System.out.println("DEBUG: Loaded " + allBooks.size() + " hardcoded books.");
 
-            // Load borrowers from the file as before
+            // Load borrowers from the file
             File borrowersFile = new File(BORROWERS_FILE_PATH);
             if (borrowersFile.exists()) {
                 allBorrowers = BorrowerXMLHandler.loadAll(BORROWERS_FILE_PATH);
             } else {
                 JOptionPane.showMessageDialog(this, "borrowers.xml not found in project root. Starting with empty list.", "Warning", JOptionPane.WARNING_MESSAGE);
             }
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage(), "Data Load Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -107,9 +104,7 @@ public class LibrarianMainFrame extends JFrame {
 
     private void saveAllData() {
         try {
-            // --- MODIFIED: Only save the borrowers file ---
-            // The book list is now static and should not be saved.
-            // BookXMLHandler.saveAll(allBooks, BOOKS_FILE_PATH);
+            // Only save the borrowers file, as the book list is static
             BorrowerXMLHandler.saveAll(allBorrowers, BORROWERS_FILE_PATH);
             System.out.println("Borrower data saved successfully to project root.");
         } catch (Exception e) {
@@ -121,9 +116,22 @@ public class LibrarianMainFrame extends JFrame {
     private JPanel createBookManagementPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBackground(babyPink.brighter());
+
+        // Panel for title and export button
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(babyPink.brighter());
         JLabel titleLabel = new JLabel("Book Management", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
-        panel.add(titleLabel, BorderLayout.NORTH);
+        topPanel.add(titleLabel, BorderLayout.CENTER);
+
+        JButton exportButton = new JButton("Export to PDF");
+        exportButton.addActionListener(e -> ReportGenerator.generateBooksReport(allBooks, "Books_Report.pdf"));
+        JPanel buttonWrapper = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonWrapper.setBackground(babyPink.brighter());
+        buttonWrapper.add(exportButton);
+        topPanel.add(buttonWrapper, BorderLayout.EAST);
+
+        panel.add(topPanel, BorderLayout.NORTH);
 
         String[] columnNames = {"ID", "Title", "Author", "Genre", "Status"};
         bookTableModel = new DefaultTableModel(columnNames, 0);
@@ -134,6 +142,13 @@ public class LibrarianMainFrame extends JFrame {
 
         refreshBookTable();
 
+        JPanel addFormPanel = createAddBookForm();
+        panel.add(addFormPanel, BorderLayout.EAST);
+
+        return panel;
+    }
+
+    private JPanel createAddBookForm() {
         JPanel addFormPanel = new JPanel(new GridBagLayout());
         addFormPanel.setBorder(BorderFactory.createTitledBorder("Add New Book"));
         addFormPanel.setBackground(babyPink.brighter());
@@ -159,8 +174,6 @@ public class LibrarianMainFrame extends JFrame {
         gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
         addFormPanel.add(addButton, gbc);
-
-        panel.add(addFormPanel, BorderLayout.EAST);
 
         addButton.addActionListener(e -> {
             try {
@@ -193,7 +206,7 @@ public class LibrarianMainFrame extends JFrame {
                 JOptionPane.showMessageDialog(this, "Please enter a valid numeric ID for the book.", "Input Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-        return panel;
+        return addFormPanel;
     }
 
     private void refreshBookTable() {
@@ -206,9 +219,21 @@ public class LibrarianMainFrame extends JFrame {
     private JPanel createBorrowerManagementPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBackground(babyPink.brighter());
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(babyPink.brighter());
         JLabel titleLabel = new JLabel("Borrower Management", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
-        panel.add(titleLabel, BorderLayout.NORTH);
+        topPanel.add(titleLabel, BorderLayout.CENTER);
+
+        JButton exportButton = new JButton("Export to PDF");
+        exportButton.addActionListener(e -> ReportGenerator.generateBorrowersReport(allBorrowers, "Borrowers_Report.pdf"));
+        JPanel buttonWrapper = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonWrapper.setBackground(babyPink.brighter());
+        buttonWrapper.add(exportButton);
+        topPanel.add(buttonWrapper, BorderLayout.EAST);
+
+        panel.add(topPanel, BorderLayout.NORTH);
 
         String[] columnNames = {"ID", "Name", "Email", "Phone", "Borrowed Count"};
         borrowerTableModel = new DefaultTableModel(columnNames, 0);
@@ -219,6 +244,13 @@ public class LibrarianMainFrame extends JFrame {
 
         refreshBorrowerTable();
 
+        JPanel addFormPanel = createAddBorrowerForm();
+        panel.add(addFormPanel, BorderLayout.EAST);
+
+        return panel;
+    }
+
+    private JPanel createAddBorrowerForm() {
         JPanel addFormPanel = new JPanel(new GridBagLayout());
         addFormPanel.setBorder(BorderFactory.createTitledBorder("Add New Borrower"));
         addFormPanel.setBackground(babyPink.brighter());
@@ -250,8 +282,6 @@ public class LibrarianMainFrame extends JFrame {
         gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
         addFormPanel.add(addButton, gbc);
-
-        panel.add(addFormPanel, BorderLayout.EAST);
 
         addButton.addActionListener(e -> {
             try {
@@ -288,7 +318,7 @@ public class LibrarianMainFrame extends JFrame {
                 JOptionPane.showMessageDialog(this, "Please enter valid numeric values for ID and Phone No.", "Input Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-        return panel;
+        return addFormPanel;
     }
 
     private void refreshBorrowerTable() {
@@ -309,13 +339,25 @@ public class LibrarianMainFrame extends JFrame {
     private JPanel createLoanManagementPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBackground(babyPink.brighter());
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(babyPink.brighter());
         JLabel titleLabel = new JLabel("Loan Management", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
-        panel.add(titleLabel, BorderLayout.NORTH);
+        topPanel.add(titleLabel, BorderLayout.CENTER);
+
+        JButton exportButton = new JButton("Export to PDF");
+        exportButton.addActionListener(e -> ReportGenerator.generateLoansReport(allBorrowers, "Loans_Report.pdf"));
+        JPanel buttonWrapper = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonWrapper.setBackground(babyPink.brighter());
+        buttonWrapper.add(exportButton);
+        topPanel.add(buttonWrapper, BorderLayout.EAST);
+
+        panel.add(topPanel, BorderLayout.NORTH);
 
         String[] columnNames = {"Borrower ID", "Borrower Name", "Book ID", "Book Title", "Issued Date", "Due Date", "Return Date", "Fine", "Fine Paid"};
         loanTableModel = new DefaultTableModel(columnNames, 0);
-        JTable loanTable = new JTable(loanTableModel);
+        loanTable = new JTable(loanTableModel); // CORECTAT: Inițializare variabilă de clasă
         loanTable.setFillsViewportHeight(true);
         loanTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -324,6 +366,13 @@ public class LibrarianMainFrame extends JFrame {
 
         refreshLoanTable();
 
+        JPanel formPanel = createLoanActionsForm();
+        panel.add(formPanel, BorderLayout.EAST);
+
+        return panel;
+    }
+
+    private JPanel createLoanActionsForm() {
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBorder(BorderFactory.createTitledBorder("Manage Loans"));
         formPanel.setBackground(babyPink.brighter());
@@ -350,8 +399,6 @@ public class LibrarianMainFrame extends JFrame {
 
         gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
         formPanel.add(buttonsPanel, gbc);
-
-        panel.add(formPanel, BorderLayout.EAST);
 
         issueButton.addActionListener(e -> {
             try {
@@ -459,7 +506,7 @@ public class LibrarianMainFrame extends JFrame {
             }
         });
 
-        return panel;
+        return formPanel;
     }
 
     private void refreshLoanTable() {

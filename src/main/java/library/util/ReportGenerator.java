@@ -2,7 +2,7 @@ package library.util;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element; // ADĂUGAT: Importul necesar pentru aliniere
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
@@ -44,10 +44,9 @@ public class ReportGenerator {
             document.add(new Paragraph("Library Book Catalog Report", TITLE_FONT));
             document.add(new Paragraph(" ")); // Add some space
 
-            PdfPTable table = new PdfPTable(new float[]{1, 3, 3, 2, 2}); // Column widths
+            PdfPTable table = new PdfPTable(new float[]{1, 3, 3, 2, 2});
             table.setWidthPercentage(100);
 
-            // Add Table Headers
             Stream.of("ID", "Title", "Author", "Genre", "Status")
                     .forEach(columnTitle -> {
                         PdfPCell header = new PdfPCell();
@@ -56,7 +55,6 @@ public class ReportGenerator {
                         table.addCell(header);
                     });
 
-            // Add Data Rows
             for (Book book : books) {
                 table.addCell(String.valueOf(book.getBookID()));
                 table.addCell(book.getTitle());

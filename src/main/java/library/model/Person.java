@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.io.Serializable;
 
-// Această adnotare JAXB se aplică tuturor câmpurilor din această clasă și claselor moștenite.
+
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class Person implements Serializable {
 

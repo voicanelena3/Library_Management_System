@@ -5,28 +5,28 @@ import library.model.Borrower;
 import library.model.Loan;
 import library.util.BookXMLHandler;
 import library.util.BorrowerXMLHandler;
-import library.util.ReportGenerator; // Importă noua clasă
+import library.util.ReportGenerator;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import javax.swing.*;//pentru componentele vizuale de baza
+import javax.swing.table.DefaultTableModel;//pentru gestionarea datelor din tabele
+import java.awt.*;//importa clasele pentru grafica
+import java.awt.event.WindowAdapter;//ca sa nu mai implementez window listener pentru evenimente care au legatura cu fereastra
+import java.awt.event.WindowEvent;//obiect eveniment - o actiune care tocmai s-a intamplat
 import java.io.File;
 import java.io.FileInputStream;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;//date calendaristice moderne
+import java.time.format.DateTimeFormatter;//formatare de date dd-mm-yyyy
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class LibrarianMainFrame extends JFrame {
 
-    private JTabbedPane tabbedPane;
+    private JTabbedPane tabbedPane;//panoul cu tab-uri
     private DefaultTableModel bookTableModel;
     private DefaultTableModel borrowerTableModel;
     private DefaultTableModel loanTableModel;
-    private JTable loanTable; // CORECTAT: Mutat la nivel de clasă
+    private JTable loanTable;
 
     private List<Book> allBooks = new ArrayList<>();
     private List<Borrower> allBorrowers = new ArrayList<>();
@@ -35,14 +35,15 @@ public class LibrarianMainFrame extends JFrame {
     private final Color babyPink = new Color(255, 204, 204);
 
     private static final String BORROWERS_FILE_PATH = "borrowers.xml";
-
+//Aceasta este metoda care se execută atunci când se creează o nouă instanță a ferestrei
+    //Rolul ei este să construiască și să asambleze întreaga interfață grafică
     public LibrarianMainFrame() {
         setTitle("Librarian Main Panel");
         setSize(1200, 700);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);//Împiedică închiderea automată, vom gestiona noi închiderea
+        setLocationRelativeTo(null);//centreaza fereastra pe ecran
         getContentPane().setBackground(babyPink);
-
+// Adaugă un ascultător de evenimente pe fereastră
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -57,15 +58,15 @@ public class LibrarianMainFrame extends JFrame {
         tabbedPane = new JTabbedPane();
         tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 14));
         tabbedPane.setBackground(babyPink.darker());
-
+        // Creează panourile pentru fiecare tab, apelând metodele dedicate
         JPanel bookManagementPanel = createBookManagementPanel();
         JPanel borrowerManagementPanel = createBorrowerManagementPanel();
         JPanel loanManagementPanel = createLoanManagementPanel();
-
+        // Adaugă panourile create ca tab-uri în `tabbedPane`
         tabbedPane.addTab("Book Management", bookManagementPanel);
         tabbedPane.addTab("Borrower Management", borrowerManagementPanel);
         tabbedPane.addTab("Loan Management", loanManagementPanel);
-
+        // Adaugă panoul cu tab-uri în centrul ferestrei
         add(tabbedPane, BorderLayout.CENTER);
 
         JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -77,19 +78,19 @@ public class LibrarianMainFrame extends JFrame {
             dispose();
         });
         southPanel.add(logoutButton);
-        add(southPanel, BorderLayout.SOUTH);
+        add(southPanel, BorderLayout.SOUTH);// Adaugă panoul de jos în partea de sud a ferestrei
     }
 
     private void loadAllData() {
         try {
-            // Use a hardcoded list of books as per previous request
+
             allBooks = new ArrayList<>();
             allBooks.add(new Book(104, "To Kill a Mockingbird", "Harper Lee", "Fiction"));
             allBooks.add(new Book(105, "The Great Gatsby", "F. Scott Fitzgerald", "Classic"));
             allBooks.add(new Book(106, "Dune", "Frank Herbert", "Science Fiction"));
             System.out.println("DEBUG: Loaded " + allBooks.size() + " hardcoded books.");
 
-            // Load borrowers from the file
+            //Incarca borroweri din fisier
             File borrowersFile = new File(BORROWERS_FILE_PATH);
             if (borrowersFile.exists()) {
                 allBorrowers = BorrowerXMLHandler.loadAll(BORROWERS_FILE_PATH);
@@ -98,13 +99,12 @@ public class LibrarianMainFrame extends JFrame {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage(), "Data Load Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            e.printStackTrace();//Printează în consolă întreaga poveste a modului în care s-a produs eroarea
         }
     }
 
     private void saveAllData() {
         try {
-            // Only save the borrowers file, as the book list is static
             BorrowerXMLHandler.saveAll(allBorrowers, BORROWERS_FILE_PATH);
             System.out.println("Borrower data saved successfully to project root.");
         } catch (Exception e) {
@@ -117,7 +117,7 @@ public class LibrarianMainFrame extends JFrame {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBackground(babyPink.brighter());
 
-        // Panel for title and export button
+
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setBackground(babyPink.brighter());
         JLabel titleLabel = new JLabel("Book Management", SwingConstants.CENTER);
@@ -126,7 +126,7 @@ public class LibrarianMainFrame extends JFrame {
 
         JButton exportButton = new JButton("Export to PDF");
         exportButton.addActionListener(e -> ReportGenerator.generateBooksReport(allBooks, "Books_Report.pdf"));
-        JPanel buttonWrapper = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel buttonWrapper = new JPanel(new FlowLayout(FlowLayout.RIGHT));  // Un mic truc de design: încapsulăm butonul într-un alt panou pentru a-l alinia la dreapta
         buttonWrapper.setBackground(babyPink.brighter());
         buttonWrapper.add(exportButton);
         topPanel.add(buttonWrapper, BorderLayout.EAST);
@@ -161,7 +161,7 @@ public class LibrarianMainFrame extends JFrame {
         JTextField authorField = new JTextField(15);
         JTextField genreField = new JTextField(15);
         JButton addButton = new JButton("Add Book to Library");
-
+        //GridBagConstraints- obiect special care funcționează ca un set de "instrucțiuni" sau "constrângeri"
         gbc.gridx = 0; gbc.gridy = 0; addFormPanel.add(new JLabel("ID:"), gbc);
         gbc.gridx = 1; gbc.gridy = 0; addFormPanel.add(idField, gbc);
         gbc.gridx = 0; gbc.gridy = 1; addFormPanel.add(new JLabel("Title:"), gbc);
@@ -177,7 +177,7 @@ public class LibrarianMainFrame extends JFrame {
 
         addButton.addActionListener(e -> {
             try {
-                int bookID = Integer.parseInt(idField.getText());
+                int bookID = Integer.parseInt(idField.getText());// Preia textul din câmpurile de input
                 String title = titleField.getText();
                 String author = authorField.getText();
                 String genre = genreField.getText();

@@ -24,7 +24,6 @@ public class Book implements Serializable {
     private boolean isBorrowed; // Indicates if the book is currently borrowed
 
     public Book() {
-        // JAXB requires a no-argument constructor
     }
 
     public Book(int bookID, String title, String author, String genre) {
@@ -32,7 +31,7 @@ public class Book implements Serializable {
         this.title = title;
         this.author = author;
         this.genre = genre;
-        this.isBorrowed = false; // Default status is available
+        this.isBorrowed = false;
     }
 
     // --- Getters ---

@@ -23,8 +23,6 @@ public class BorrowerXMLHandler {
     @XmlRootElement(name = "borrowers")
     private static class BorrowersWrapper {
         private List<Borrower> borrowers;
-
-        // This annotation is crucial for both reading and writing the list correctly.
         @XmlElement(name = "borrower")
         public List<Borrower> getBorrowers() {
             return borrowers;
@@ -43,7 +41,7 @@ public class BorrowerXMLHandler {
     public static List<Borrower> loadAll(String filename) {
         try {
             File file = new File(filename);
-            // The JAXBContext must know about all classes it needs to process.
+
             JAXBContext jaxbContext = JAXBContext.newInstance(BorrowersWrapper.class, Borrower.class, Loan.class, Book.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             BorrowersWrapper wrapper = (BorrowersWrapper) jaxbUnmarshaller.unmarshal(file);
@@ -90,10 +88,8 @@ public class BorrowerXMLHandler {
         JAXBContext jaxbContext = JAXBContext.newInstance(BorrowersWrapper.class, Borrower.class, Loan.class, Book.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
-        // This property makes the output XML human-readable.
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        // Write the data to the file
         jaxbMarshaller.marshal(wrapper, new File(filename));
     }
 }

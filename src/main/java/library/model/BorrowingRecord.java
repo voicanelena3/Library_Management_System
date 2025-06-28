@@ -15,11 +15,11 @@ public class BorrowingRecord {
     private int recordId;
     private int borrowerId;
     private int bookId;
-    private int quantity; // Assuming you added this field
-    private LocalDate issuedDate; // Renamed from borrowDate
+    private int quantity;
+    private LocalDate issuedDate;
     private LocalDate dueDate;
 
-    // Add new constructor to match SampleDataGenerator
+
     public BorrowingRecord(int recordId, int borrowerId, int bookId, LocalDate issuedDate, LocalDate dueDate) {
         this.recordId = recordId;
         this.borrowerId = borrowerId;
@@ -32,7 +32,6 @@ public class BorrowingRecord {
         // Required for JAXB
     }
 
-    // Corrected getter method name
     public LocalDate getIssuedDate() {
         return issuedDate;
     }

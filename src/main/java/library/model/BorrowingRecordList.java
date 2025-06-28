@@ -20,7 +20,7 @@ public class BorrowingRecordList {
     @XmlElement(name = "record")
     private List<BorrowingRecord> records = new ArrayList<>();
 
-    // No-argument constructor required for JAXB
+
     public BorrowingRecordList() {
     }
 

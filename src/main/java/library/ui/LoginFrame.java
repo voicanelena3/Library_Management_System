@@ -6,12 +6,13 @@ import library.util.BorrowerXMLHandler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File; // Import the File class
-import java.io.FileInputStream; // Import the FileInputStream class
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Objects;// Pentru a compara obiecte în siguranță (ex: parole)
+
 
 public class LoginFrame extends JFrame {
 
@@ -21,14 +22,14 @@ public class LoginFrame extends JFrame {
     public LoginFrame() {
         setTitle("Library Login");
         setSize(400, 250);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// Când se apasă x, programul se oprește complet
         setLocationRelativeTo(null);
-        setLayout(new GridBagLayout());
+        setLayout(new GridBagLayout());// Folosește GridBagLayout pentru a aranja componentele într-o grilă
         getContentPane().setBackground(babyPink);
 
-        // Load user data
+        // Pasul 1: Încarcă datele despre utilizatori în lista 'allUsers'
         loadUserData();
-
+        // Pasul 2: Creează și aranjează componentele vizuale
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
@@ -36,7 +37,7 @@ public class LoginFrame extends JFrame {
         JTextField userField = new JTextField(15);
 
         JLabel passLabel = new JLabel("Password:");
-        JPasswordField passField = new JPasswordField(15);
+        JPasswordField passField = new JPasswordField(15);// Folosim JPasswordField pentru a masca parola xxxxxxxx
 
         JButton loginButton = new JButton("Login");
 
@@ -62,34 +63,33 @@ public class LoginFrame extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
         add(loginButton, gbc);
 
-        // --- THE CORE LOGIN LOGIC ---
+        // Pasul 3: Definește acțiunea care se întâmplă la click pe buton
         loginButton.addActionListener(e -> {
             try {
+                // Preia datele introduse de utilizator
                 int userId = Integer.parseInt(userField.getText());
                 String password = new String(passField.getPassword());
 
-                // Find the user by ID and password
+                // Caută în lista de utilizatori
                 Borrower authenticatedUser = allUsers.stream()
                         .filter(user -> user.getId() == userId && Objects.equals(user.getPassword(), password))
-                        .findFirst()
-                        .orElse(null);
+                        .findFirst()// Ia primul (și singurul) rezultat găsit
+                        .orElse(null);// Dacă nu se găsește nimic, rezultatul este null
+
 
                 if (authenticatedUser != null) {
-                    // Successful login, now check the role
+
                     JOptionPane.showMessageDialog(this, "Login Successful! Welcome, " + authenticatedUser.getName());
 
-                    // --- ROLE-BASED NAVIGATION ---
+                    // Navigarea pe bază de rol
                     if ("Librarian".equalsIgnoreCase(authenticatedUser.getRole())) {
-                        // If user is a Librarian, open the Librarian frame
                         new LibrarianMainFrame().setVisible(true);
                     } else {
-                        // Otherwise, assume Borrower and open the Borrower frame
                         new BorrowerMainFrame(authenticatedUser).setVisible(true);
                     }
-                    dispose(); // Close the login window
+                    dispose();
 
                 } else {
-                    // Failed login
                     JOptionPane.showMessageDialog(this, "Invalid ID or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
                 }
 
@@ -101,7 +101,6 @@ public class LoginFrame extends JFrame {
 
     private void loadUserData() {
         try {
-            // MODIFIED: Load the file directly from the project root directory
             File borrowersFile = new File("borrowers.xml");
 
             if (!borrowersFile.exists()) {
@@ -109,7 +108,6 @@ public class LoginFrame extends JFrame {
                 return;
             }
 
-            // Use a FileInputStream to read the file from the specific path
             InputStream borrowersStream = new FileInputStream(borrowersFile);
             allUsers = BorrowerXMLHandler.loadAll(borrowersStream);
             System.out.println("DEBUG (Login): Loaded " + allUsers.size() + " users from project root.");

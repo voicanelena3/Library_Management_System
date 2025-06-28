@@ -15,10 +15,9 @@ public class MainFrame extends JFrame {
     private JTable borrowerTable;
     private List<Borrower> borrowers = new ArrayList<>();
 
-    // Input fields
     private JTextField idField = new JTextField(10);
     private JTextField nameField = new JTextField(10);
-    private JTextField passwordField = new JPasswordField(10); // Use JPasswordField for password
+    private JTextField passwordField = new JPasswordField(10);
     private JTextField addressField = new JTextField(10);
     private JTextField phoneField = new JTextField(10);
     private JTextField emailField = new JTextField(10);
@@ -31,21 +30,17 @@ public class MainFrame extends JFrame {
 
         setLayout(new BorderLayout());
 
-        // Initialize borrowerModel BEFORE loading data into it
         String[] columnNames = {"ID", "Name", "Email", "Phone", "Borrowed Books"};
         borrowerModel = new DefaultTableModel(columnNames, 0); // Initialize here
 
         try {
-            // FIX: Use the correct file path from the data directory
             String filePath = "src/main/resources/data/borrowers.xml";
             File file = new File(filePath);
 
             if (file.exists()) {
-                // FIX: Use the correct method name loadAll()
                 borrowers = BorrowerXMLHandler.loadAll(filePath);
                 if (borrowers != null) {
                     for (Borrower b : borrowers) {
-                        // FIX: Use getPhoneNumber() and getBorrowedBooks()
                         borrowerModel.addRow(new Object[]{
                                 b.getId(), b.getName(), b.getEmail(), b.getPhoneNumber(), b.getBorrowedBooks().size()
                         });
@@ -130,12 +125,10 @@ public class MainFrame extends JFrame {
                 }
 
                 borrowers.add(b);
-                // FIX: Use getPhoneNumber() and getBorrowedBooks()
                 borrowerModel.addRow(new Object[]{
                         b.getId(), b.getName(), b.getEmail(), b.getPhoneNumber(), b.getBorrowedBooks().size()
                 });
 
-                // Clear form
                 idField.setText("");
                 nameField.setText("");
                 ((JPasswordField)passwordField).setText("");

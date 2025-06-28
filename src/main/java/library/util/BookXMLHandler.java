@@ -11,7 +11,6 @@ import java.util.List;
 
 public class BookXMLHandler {
 
-    // FIX: Changed visibility to public static and added filePath parameter
     public static List<Book> loadAll(String filePath) {
         try {
             File xmlFile = new File(filePath);
@@ -32,8 +31,6 @@ public class BookXMLHandler {
             return new ArrayList<>();
         }
     }
-
-    // FIX: Changed visibility to public static
     public static void saveAll(List<Book> books, String filePath) {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(BookList.class);

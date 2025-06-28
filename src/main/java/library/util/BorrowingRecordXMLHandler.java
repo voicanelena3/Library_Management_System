@@ -1,12 +1,11 @@
-// In file: src/main/java/library/util/BorrowingRecordXMLHandler.java
 
-package library.util; // CORECTAT: Pachetul trebuie să fie 'library.util'
+package library.util;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
-import library.model.BorrowingRecord; // ADAUGAT: Trebuie sa importati clasa BorrowingRecord
-import library.model.BorrowingRecordList; // Importul este deja corect
+import library.model.BorrowingRecord;
+import library.model.BorrowingRecordList;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,6 @@ public class BorrowingRecordXMLHandler {
      */
     public static List<BorrowingRecord> loadAll(String filePath) {
         try {
-            // Get the URL for the resource file
             File xmlFile = new File(filePath);
 
             if (!xmlFile.exists() || xmlFile.length() == 0) {
@@ -52,14 +50,11 @@ public class BorrowingRecordXMLHandler {
             JAXBContext jaxbContext = JAXBContext.newInstance(BorrowingRecordList.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
-            // Set a property to format the XML output nicely
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-            // Create a list wrapper and set the records
             BorrowingRecordList borrowingRecordList = new BorrowingRecordList();
             borrowingRecordList.setRecords(records);
 
-            // Marshal the object to the file
             jaxbMarshaller.marshal(borrowingRecordList, new File(filePath));
             System.out.println("Borrowing records data saved successfully to " + filePath);
 
@@ -69,5 +64,4 @@ public class BorrowingRecordXMLHandler {
         }
     }
 
-    // ELIMINAT: Metoda duplicat și goală a fost eliminată
 }

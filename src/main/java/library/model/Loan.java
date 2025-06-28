@@ -105,16 +105,15 @@ public class Loan implements Serializable {
 
         LocalDate effectiveReturnDate = (returnedDate != null) ? returnedDate : LocalDate.now();
 
-        // If returned before or on due date, or not yet returned and current date is before due date
         if (effectiveReturnDate.isBefore(dueDate) || effectiveReturnDate.isEqual(dueDate)) {
             return 0.0;
         }
 
-        // If overdue, calculate days overdue and apply hardcoded fine rate
+
         long daysOverdue = ChronoUnit.DAYS.between(dueDate, effectiveReturnDate);
 
-        // Hardcoded fine per day
-        double finePerDay = 0.5; // Example: 0.5 units per day
+
+        double finePerDay = 0.5;
 
         return daysOverdue * finePerDay;
     }

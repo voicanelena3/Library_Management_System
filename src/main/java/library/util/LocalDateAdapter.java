@@ -12,14 +12,12 @@ public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
 
     @Override
     public LocalDate unmarshal(String v) throws Exception {
-        // When reading from XML, convert the String back to LocalDate
         if (v == null || v.trim().isEmpty()) {
-            return null; // Handle empty or null strings
+            return null;
         }
         try {
             return LocalDate.parse(v);
         } catch (DateTimeParseException e) {
-            // Log or rethrow a more specific exception if needed
             System.err.println("Error parsing date string: " + v + " - " + e.getMessage());
             throw new Exception("Invalid date format in XML: " + v, e);
         }
@@ -27,9 +25,8 @@ public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
 
     @Override
     public String marshal(LocalDate v) throws Exception {
-        // When writing to XML, convert the LocalDate to a String
         if (v == null) {
-            return null; // Handle null LocalDate
+            return null;
         }
         return v.toString();
     }

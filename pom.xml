@@ -17,6 +17,13 @@
     </properties>
 
     <dependencies>
+        <!-- ADĂUGAT: Dependența necesară pentru JCalendar și JDateChooser -->
+        <dependency>
+            <groupId>com.toedter</groupId>
+            <artifactId>jcalendar</artifactId>
+            <version>1.4</version>
+        </dependency>
+
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
@@ -40,12 +47,12 @@
             <version>3.0.2</version>
         </dependency>
 
-
     </dependencies>
 
+    <!-- Un singur tag <build> care conține toate plugin-urile -->
     <build>
         <plugins>
-
+            <!-- Plugin pentru a rula clasa Main -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -54,6 +61,20 @@
                     <mainClass>library.Main</mainClass>
                 </configuration>
             </plugin>
+
+            <!-- Plugin pentru a configura fișierul JAR cu manifestul specificat -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <archive>
+                        <!-- Specifică locația fișierului manifest -->
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
 </project>

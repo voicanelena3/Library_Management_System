@@ -17,11 +17,18 @@
     </properties>
 
     <dependencies>
-        <!-- ADĂUGAT: Dependența necesară pentru JCalendar și JDateChooser -->
+
         <dependency>
             <groupId>com.toedter</groupId>
             <artifactId>jcalendar</artifactId>
             <version>1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope> <!-- 'test' înseamnă că este folosit doar pentru testare -->
         </dependency>
 
         <dependency>

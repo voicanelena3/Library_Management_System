@@ -12,12 +12,17 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;// Pentru a compara obiecte în siguranță (ex: parole)
+import java.awt.event.MouseAdapter; // Importăm MouseAdapter
+import java.awt.event.MouseEvent;   // Importăm MouseEvent
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 
 public class LoginFrame extends JFrame {
 
     private final Color babyPink = new Color(255, 204, 204);
     private List<Borrower> allUsers = new ArrayList<>();
+    private final Color focusBgColor = new Color(255, 255, 224);
 
     public LoginFrame() {
         setTitle("Library Login");
@@ -72,7 +77,37 @@ public class LoginFrame extends JFrame {
         gbc.gridy = 3;
         gbc.gridwidth = 2;
         add(bookstoreButton, gbc);
+        FocusAdapter focusListener = new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                e.getComponent().setBackground(focusBgColor);
+            }
 
+            @Override
+            public void focusLost(FocusEvent e) {
+                e.getComponent().setBackground(babyPink);
+            }
+        };
+        userField.addFocusListener(focusListener);
+        passField.addFocusListener(focusListener);
+
+        // --- NOU: Adăugarea MouseListener pentru buton ---
+        Color originalButtonColor = loginButton.getBackground();
+        Color hoverButtonColor = originalButtonColor.brighter();
+
+        loginButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // Se execută când mouse-ul intră pe buton
+                loginButton.setBackground(hoverButtonColor);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // Se execută când mouse-ul iese de pe buton
+                loginButton.setBackground(originalButtonColor);
+            }
+        });
         // Pasul 3: Definește acțiunea care se întâmplă la click pe buton
         loginButton.addActionListener(e -> {
             try {

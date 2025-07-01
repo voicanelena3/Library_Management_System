@@ -1,8 +1,10 @@
 package library.ui;
 
+import library.model.AntiqueBook;
 import library.model.Book;
 import library.model.Borrower;
 import library.model.Loan;
+import library.util.AntiqueBookDAO;
 import library.util.BookXMLHandler;
 import library.util.BorrowerXMLHandler;
 import library.util.ReportGenerator;
@@ -34,8 +36,12 @@ public class LibrarianMainFrame extends JFrame {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private final Color babyPink = new Color(255, 204, 204);
 
+    private List<AntiqueBook> allAntiqueBooks;
+    private AntiqueBookDAO antiqueBookDAO;
+
+
     private static final String BORROWERS_FILE_PATH = "borrowers.xml";
-//Aceasta este metoda care se execută atunci când se creează o nouă instanță a ferestrei
+    //Aceasta este metoda care se execută atunci când se creează o nouă instanță a ferestrei
     //Rolul ei este să construiască și să asambleze întreaga interfață grafică
     public LibrarianMainFrame() {
         setTitle("Librarian Main Panel");
@@ -43,6 +49,8 @@ public class LibrarianMainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);//Împiedică închiderea automată, vom gestiona noi închiderea
         setLocationRelativeTo(null);//centreaza fereastra pe ecran
         getContentPane().setBackground(babyPink);
+        this.antiqueBookDAO = new AntiqueBookDAO();
+
 // Adaugă un ascultător de evenimente pe fereastră
         addWindowListener(new WindowAdapter() {
             @Override
@@ -66,6 +74,7 @@ public class LibrarianMainFrame extends JFrame {
         tabbedPane.addTab("Book Management", bookManagementPanel);
         tabbedPane.addTab("Borrower Management", borrowerManagementPanel);
         tabbedPane.addTab("Loan Management", loanManagementPanel);
+
         // Adaugă panoul cu tab-uri în centrul ferestrei
         add(tabbedPane, BorderLayout.CENTER);
 

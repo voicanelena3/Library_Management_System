@@ -170,4 +170,24 @@
         <role>Borrower</role>
         <borrowedLoans/>
     </borrower>
+    <borrower>
+        <id>6</id>
+        <name>Diana</name>
+        <password>diana</password>
+        <address>undeva</address>
+        <phoneNumber>122333</phoneNumber>
+        <email>diana</email>
+        <role>Borrower</role>
+        <borrowedLoans/>
+    </borrower>
+    <borrower>
+        <id>7</id>
+        <name>cineva1</name>
+        <password>1</password>
+        <address>11</address>
+        <phoneNumber>1</phoneNumber>
+        <email>1</email>
+        <role>Borrower</role>
+        <borrowedLoans/>
+    </borrower>
 </borrowers>

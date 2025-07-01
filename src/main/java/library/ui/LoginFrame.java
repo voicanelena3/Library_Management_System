@@ -41,6 +41,11 @@ public class LoginFrame extends JFrame {
 
         JButton loginButton = new JButton("Login");
 
+        JButton bookstoreButton = new JButton("Explore Bookstore");
+        bookstoreButton.addActionListener(e -> {
+            new BookstoreFrame().setVisible(true);
+        });
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(userLabel, gbc);
@@ -62,6 +67,11 @@ public class LoginFrame extends JFrame {
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         add(loginButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        add(bookstoreButton, gbc);
 
         // Pasul 3: Definește acțiunea care se întâmplă la click pe buton
         loginButton.addActionListener(e -> {

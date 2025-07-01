@@ -32,9 +32,9 @@ public class LoginFrame extends JFrame {
         setLayout(new GridBagLayout());// Folosește GridBagLayout pentru a aranja componentele într-o grilă
         getContentPane().setBackground(babyPink);
 
-        // Pasul 1: Încarcă datele despre utilizatori în lista 'allUsers'
+
         loadUserData();
-        // Pasul 2: Creează și aranjează componentele vizuale
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
@@ -91,35 +91,35 @@ public class LoginFrame extends JFrame {
         userField.addFocusListener(focusListener);
         passField.addFocusListener(focusListener);
 
-        // --- NOU: Adăugarea MouseListener pentru buton ---
+
         Color originalButtonColor = loginButton.getBackground();
         Color hoverButtonColor = originalButtonColor.brighter();
 
         loginButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                // Se execută când mouse-ul intră pe buton
+
                 loginButton.setBackground(hoverButtonColor);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                // Se execută când mouse-ul iese de pe buton
+
                 loginButton.setBackground(originalButtonColor);
             }
         });
-        // Pasul 3: Definește acțiunea care se întâmplă la click pe buton
+
         loginButton.addActionListener(e -> {
             try {
-                // Preia datele introduse de utilizator
+
                 int userId = Integer.parseInt(userField.getText());
                 String password = new String(passField.getPassword());
 
-                // Caută în lista de utilizatori
+
                 Borrower authenticatedUser = allUsers.stream()
                         .filter(user -> user.getId() == userId && Objects.equals(user.getPassword(), password))
-                        .findFirst()// Ia primul (și singurul) rezultat găsit
-                        .orElse(null);// Dacă nu se găsește nimic, rezultatul este null
+                        .findFirst()
+                        .orElse(null);
 
 
                 if (authenticatedUser != null) {

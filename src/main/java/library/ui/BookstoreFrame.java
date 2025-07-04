@@ -4,7 +4,8 @@ import library.model.AntiqueBook;
 import library.util.AntiqueBookDAO;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -16,33 +17,42 @@ public class BookstoreFrame extends JFrame {
     private JTable table;
     private AntiqueBookDAO antiqueBookDAO;
     private List<AntiqueBook> currentBooks;
+    private JTextField searchField; // NOU: Câmpul de căutare
 
     public BookstoreFrame() {
         this.antiqueBookDAO = new AntiqueBookDAO();
         setTitle("Antique Bookstore");
-        setSize(800, 600); // Mărit puțin pentru a face loc noilor controale
+        setSize(800, 650);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // --- Panoul de sus (Titlu + Opțiuni de Sortare) ---
-        JPanel topPanel = new JPanel(new BorderLayout());
+        // Panoul de sus pentru titlu și controale
+        JPanel topPanel = new JPanel(new BorderLayout(0, 10));
+        topPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5));
 
-        // Titlul principal
         JLabel titleLabel = new JLabel("Welcome to our Antique Bookstore!", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 22));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         topPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Panoul pentru sortare
-        JPanel sortPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
-        sortPanel.setBorder(BorderFactory.createTitledBorder("Sort Options"));
+        // Panou pentru controale (Căutare și Sortare)
+        JPanel controlsPanel = new JPanel(new GridLayout(2, 1, 0, 5));
 
+        // NOU: Panoul pentru Căutare
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
+        searchPanel.add(new JLabel("Search by Title/Author:"));
+        searchField = new JTextField(25);
+        searchPanel.add(searchField);
+        controlsPanel.add(searchPanel);
+
+        // Panoul existent pentru Sortare
+        JPanel sortPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        sortPanel.setBorder(BorderFactory.createTitledBorder("Sort Options"));
         sortPanel.add(new JLabel("Sort by:"));
         String[] sortOptions = {"Title", "Author", "Year", "Price", "Condition"};
         JComboBox<String> sortComboBox = new JComboBox<>(sortOptions);
         sortPanel.add(sortComboBox);
-
         JRadioButton ascRadioButton = new JRadioButton("Ascending", true);
         JRadioButton descRadioButton = new JRadioButton("Descending");
         ButtonGroup sortOrderGroup = new ButtonGroup();
@@ -50,13 +60,13 @@ public class BookstoreFrame extends JFrame {
         sortOrderGroup.add(descRadioButton);
         sortPanel.add(ascRadioButton);
         sortPanel.add(descRadioButton);
-
         JButton sortButton = new JButton("Apply Sort");
         sortPanel.add(sortButton);
-        topPanel.add(sortPanel, BorderLayout.CENTER);
+        controlsPanel.add(sortPanel);
 
-        // --- Tabelul ---
-        // (codul pentru tabel rămâne la fel ca înainte)
+        topPanel.add(controlsPanel, BorderLayout.CENTER);
+
+        // Tabelul (cod existent)
         String[] columnNames = {"Title", "Author", "Year", "Condition", "Price (€)"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -72,40 +82,52 @@ public class BookstoreFrame extends JFrame {
         table.setSelectionForeground(Color.BLACK);
         table.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int selectedRow = table.getSelectedRow();
-                    if (selectedRow >= 0) {
-                        AntiqueBook selectedBook = currentBooks.get(selectedRow);
-                        new BookDetailsDialogue(BookstoreFrame.this, selectedBook, antiqueBookDAO).setVisible(true);
-                    }
+                if (e.getClickCount() == 2 && table.getSelectedRow() != -1) {
+                    int modelRow = table.convertRowIndexToModel(table.getSelectedRow());
+                    AntiqueBook selectedBook = currentBooks.get(modelRow);
+                    new BookDetailsDialogue(BookstoreFrame.this, selectedBook, antiqueBookDAO).setVisible(true);
                 }
             }
         });
 
-        // --- Butonul de întoarcere ---
+        // Butonul de întoarcere (cod existent)
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton backButton = new JButton("Return to Login");
-        backButton.setFont(new Font("SansSerif", Font.BOLD, 14));
-        backButton.addActionListener(e -> {
-            dispose();
-            new LoginFrame().setVisible(true);
-        });
         bottomPanel.add(backButton);
+        backButton.addActionListener(e -> { dispose(); new LoginFrame().setVisible(true); });
 
-        // --- Adăugarea componentelor în fereastră ---
+        // Adăugarea componentelor în fereastră
         add(topPanel, BorderLayout.NORTH);
         add(new JScrollPane(table), BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
 
-        // --- Logica Butonului de Sortare ---
+        // Logica pentru controale
         sortButton.addActionListener(e -> {
             String sortBy = (String) sortComboBox.getSelectedItem();
             String sortOrder = ascRadioButton.isSelected() ? "ASC" : "DESC";
             loadSortedBookData(sortBy, sortOrder);
         });
 
+        // NOU: Listener pentru căutare în timp real
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) { performSearch(); }
+            public void removeUpdate(DocumentEvent e) { performSearch(); }
+            public void changedUpdate(DocumentEvent e) { performSearch(); }
+        });
+
         // Încărcarea datelor inițiale
         loadInitialBookData();
+    }
+
+    // NOU: Metoda care execută căutarea
+    private void performSearch() {
+        String searchTerm = searchField.getText();
+        if (searchTerm.trim().isEmpty()) {
+            loadInitialBookData();
+        } else {
+            this.currentBooks = antiqueBookDAO.searchBooks(searchTerm);
+            populateTableWithCurrentBooks();
+        }
     }
 
     private void loadInitialBookData() {
@@ -119,7 +141,7 @@ public class BookstoreFrame extends JFrame {
     }
 
     private void populateTableWithCurrentBooks() {
-        tableModel.setRowCount(0); // Golește tabelul
+        tableModel.setRowCount(0);
         if (currentBooks != null) {
             for (AntiqueBook book : currentBooks) {
                 tableModel.addRow(new Object[]{
@@ -134,6 +156,12 @@ public class BookstoreFrame extends JFrame {
     }
 
     public void refreshBookData() {
-        loadInitialBookData(); // Reîncarcă datele nesortate după o cumpărare
+        String searchTerm = searchField.getText();
+        // Reîmprospătează pe baza vizualizării curente (rezultatele căutării sau toate cărțile)
+        if (searchTerm.trim().isEmpty()) {
+            loadInitialBookData();
+        } else {
+            performSearch();
+        }
     }
 }

@@ -29,19 +29,21 @@ public class PaymentDialogue extends JDialog {
         JButton confirmButton = new JButton("Confirm Purchase");
         confirmButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+
         confirmButton.addActionListener(e -> {
             // Într-o aplicație reală, aici ar fi validarea datelor
 
-            // Șterge cartea din baza de date
-            boolean success = dao.deleteBookByTitle(book.getTitle()); // Vom folosi titlul ca identificator unic
+            // --> AICI ESTE CHEIA <--
+            // Se apelează metoda de ștergere din DAO, folosind ID-ul cărții
+            boolean success = dao.deleteBookById(book.getId());
 
             if (success) {
                 JOptionPane.showMessageDialog(this, "Purchase successful! Thank you.", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                // Reîmprospătează tabelul din fereastra principală
+                // Se reîmprospătează tabelul din fereastra principală
                 parent.refreshBookData();
 
-                // Închide fereastra de plată
+                // Se închide fereastra de plată
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Error processing purchase.", "Error", JOptionPane.ERROR_MESSAGE);

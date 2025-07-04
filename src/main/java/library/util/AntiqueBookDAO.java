@@ -74,4 +74,25 @@ public class AntiqueBookDAO {
             return false;
         }
     }
+
+    public boolean deleteBookById(int bookId) {
+        // Comanda SQL care șterge înregistrarea pe baza ID-ului
+        String sql = "DELETE FROM antique_books WHERE antique_id = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // Se setează ID-ul în comanda SQL pentru a evita SQL Injection
+            pstmt.setInt(1, bookId);
+
+            // Se execută comanda și se verifică dacă a fost șters vreun rând
+            int affectedRows = pstmt.executeUpdate();
+
+            return affectedRows > 0; // Returnează 'true' dacă ștergerea a avut succes
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -99,14 +99,27 @@ public class BorrowerMainFrame extends JFrame {
     }
 
     private JPanel createActionPanel() {
-        JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        // Panel now uses FlowLayout, aligning components to the center with a horizontal gap
+        JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10)); // Added gaps for spacing
+        actionPanel.setBackground(babyPink);
+
+        // Button to view all due dates
         JButton viewBorrowedDatesButton = new JButton("View All Due Dates on Calendar");
         viewBorrowedDatesButton.addActionListener(e -> showAllBorrowedDatesOnCalendar());
+
+        // NEW: Logout Button
+        JButton logoutButton = new JButton("Logout & Return to Login");
+        logoutButton.addActionListener(e -> {
+            dispose(); // Closes the current BorrowerMainFrame window
+            new LoginFrame().setVisible(true); // Creates and shows a new LoginFrame
+        });
+
+        // Add both buttons to the panel
         actionPanel.add(viewBorrowedDatesButton);
-        actionPanel.setBackground(babyPink);
+        actionPanel.add(logoutButton); // Add the new button
+
         return actionPanel;
     }
-
     private void populateBorrowedBooksTable() {
         borrowedBooksModel.setRowCount(0);
 

@@ -2,7 +2,9 @@ package library.ui;
 
 import library.model.AntiqueBook;
 import library.util.AntiqueBookDAO;
+
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -13,24 +15,49 @@ public class BookstoreFrame extends JFrame {
     private DefaultTableModel tableModel;
     private JTable table;
     private AntiqueBookDAO antiqueBookDAO;
-    private List<AntiqueBook> currentBooks; // Store the currently displayed list of books
+    private List<AntiqueBook> currentBooks;
 
     public BookstoreFrame() {
         this.antiqueBookDAO = new AntiqueBookDAO();
         setTitle("Antique Bookstore");
-        setSize(800, 500);
+        setSize(800, 600); // Mărit puțin pentru a face loc noilor controale
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // --- Title Label ---
+        // --- Panoul de sus (Titlu + Opțiuni de Sortare) ---
+        JPanel topPanel = new JPanel(new BorderLayout());
+
+        // Titlul principal
         JLabel titleLabel = new JLabel("Welcome to our Antique Bookstore!", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 22));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        topPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // --- Table Setup ---
+        // Panoul pentru sortare
+        JPanel sortPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        sortPanel.setBorder(BorderFactory.createTitledBorder("Sort Options"));
+
+        sortPanel.add(new JLabel("Sort by:"));
+        String[] sortOptions = {"Title", "Author", "Year", "Price", "Condition"};
+        JComboBox<String> sortComboBox = new JComboBox<>(sortOptions);
+        sortPanel.add(sortComboBox);
+
+        JRadioButton ascRadioButton = new JRadioButton("Ascending", true);
+        JRadioButton descRadioButton = new JRadioButton("Descending");
+        ButtonGroup sortOrderGroup = new ButtonGroup();
+        sortOrderGroup.add(ascRadioButton);
+        sortOrderGroup.add(descRadioButton);
+        sortPanel.add(ascRadioButton);
+        sortPanel.add(descRadioButton);
+
+        JButton sortButton = new JButton("Apply Sort");
+        sortPanel.add(sortButton);
+        topPanel.add(sortPanel, BorderLayout.CENTER);
+
+        // --- Tabelul ---
+        // (codul pentru tabel rămâne la fel ca înainte)
         String[] columnNames = {"Title", "Author", "Year", "Condition", "Price (€)"};
-        // Make table cells non-editable
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -40,76 +67,73 @@ public class BookstoreFrame extends JFrame {
         table = new JTable(tableModel);
         table.setFont(new Font("SansSerif", Font.PLAIN, 14));
         table.setRowHeight(25);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Allow only one row to be selected
-
-        // --- SET SELECTION COLOR TO PINK ---
-        table.setSelectionBackground(new Color(255, 204, 204)); // Setează culoarea de selecție la roz
-        table.setSelectionForeground(Color.BLACK); // Asigură că textul rămâne negru și lizibil
-
-        // --- MOUSE LISTENER TO OPEN DETAILS WINDOW ---
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setSelectionBackground(new Color(255, 204, 204));
+        table.setSelectionForeground(Color.BLACK);
         table.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                // This checks for a DOUBLE-CLICK.
-                // If you want a SINGLE-CLICK, change e.getClickCount() == 2 to e.getClickCount() == 1
                 if (e.getClickCount() == 2) {
                     int selectedRow = table.getSelectedRow();
                     if (selectedRow >= 0) {
-                        // Get the selected book from our stored list
                         AntiqueBook selectedBook = currentBooks.get(selectedRow);
-
-                        // Open the details dialog for the selected book
                         new BookDetailsDialogue(BookstoreFrame.this, selectedBook, antiqueBookDAO).setVisible(true);
                     }
                 }
             }
         });
 
-        // --- Back Button ---
+        // --- Butonul de întoarcere ---
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton backButton = new JButton("Return to Login");
         backButton.setFont(new Font("SansSerif", Font.BOLD, 14));
-        backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backButton.addActionListener(e -> {
             dispose();
             new LoginFrame().setVisible(true);
         });
-        bottomPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         bottomPanel.add(backButton);
 
-        // --- Add components to frame ---
-        add(titleLabel, BorderLayout.NORTH);
+        // --- Adăugarea componentelor în fereastră ---
+        add(topPanel, BorderLayout.NORTH);
         add(new JScrollPane(table), BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
 
-        // Load and display data
-        loadBookData();
+        // --- Logica Butonului de Sortare ---
+        sortButton.addActionListener(e -> {
+            String sortBy = (String) sortComboBox.getSelectedItem();
+            String sortOrder = ascRadioButton.isSelected() ? "ASC" : "DESC";
+            loadSortedBookData(sortBy, sortOrder);
+        });
+
+        // Încărcarea datelor inițiale
+        loadInitialBookData();
     }
 
-    private void loadBookData() {
-        // Store the books in the class-level list
+    private void loadInitialBookData() {
         this.currentBooks = antiqueBookDAO.getAllAntiqueBooks();
+        populateTableWithCurrentBooks();
+    }
 
-        // Clear the table before adding new data
-        tableModel.setRowCount(0);
+    private void loadSortedBookData(String sortBy, String sortOrder) {
+        this.currentBooks = antiqueBookDAO.getSortedAntiqueBooks(sortBy, sortOrder);
+        populateTableWithCurrentBooks();
+    }
 
-        for (AntiqueBook book : currentBooks) {
-            tableModel.addRow(new Object[]{
-                    book.getTitle(),
-                    book.getAuthor(),
-                    book.getPublishedYear(),
-                    book.getCondition(),
-                    String.format("%.2f", book.getPrice())
-            });
+    private void populateTableWithCurrentBooks() {
+        tableModel.setRowCount(0); // Golește tabelul
+        if (currentBooks != null) {
+            for (AntiqueBook book : currentBooks) {
+                tableModel.addRow(new Object[]{
+                        book.getTitle(),
+                        book.getAuthor(),
+                        book.getPublishedYear(),
+                        book.getCondition(),
+                        String.format("%.2f", book.getPrice())
+                });
+            }
         }
     }
 
-    /**
-     * This public method allows other windows (like the PaymentDialog)
-     * to refresh the data in this table after a book is purchased.
-     */
     public void refreshBookData() {
-        loadBookData();
+        loadInitialBookData(); // Reîncarcă datele nesortate după o cumpărare
     }
-
-
 }

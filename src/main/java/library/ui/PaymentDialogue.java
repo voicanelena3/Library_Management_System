@@ -33,8 +33,6 @@ public class PaymentDialogue extends JDialog {
         confirmButton.addActionListener(e -> {
             // Într-o aplicație reală, aici ar fi validarea datelor
 
-            // --> AICI ESTE CHEIA <--
-            // Se apelează metoda de ștergere din DAO, folosind ID-ul cărții
             boolean success = dao.deleteBookById(book.getId());
 
             if (success) {

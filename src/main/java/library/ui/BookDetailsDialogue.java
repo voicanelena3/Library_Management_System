@@ -14,11 +14,11 @@ public class BookDetailsDialogue extends JDialog {
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout(10, 10));
 
-        // Panel for book details
         JPanel detailsPanel = new JPanel();
         detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
         detailsPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
+        //Se folosește HTML direct în textul JLabel (<html><b>...</b></html>) pentru a formata textul
         detailsPanel.add(new JLabel("<html><b>Title:</b> " + book.getTitle() + "</html>"));
         detailsPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         detailsPanel.add(new JLabel("<html><b>Author:</b> " + book.getAuthor() + "</html>"));
@@ -31,18 +31,18 @@ public class BookDetailsDialogue extends JDialog {
         priceLabel.setFont(new Font("Serif", Font.BOLD, 16));
         detailsPanel.add(priceLabel);
 
-        // --- Buy Button with Resized Icon ---
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         JButton buyButton;
 
         try {
-            // Calea NU trebuie să înceapă cu "/" când folosim ClassLoader
+
             URL iconUrl = BookDetailsDialogue.class.getClassLoader().getResource("icons/cart.png");
 
             if (iconUrl != null) {
                 ImageIcon originalIcon = new ImageIcon(iconUrl);
-                // Redimensionăm imaginea la o dimensiune mai mică și potrivită
+
                 Image image = originalIcon.getImage();
                 Image resizedImage = image.getScaledInstance(24, 24, java.awt.Image.SCALE_SMOOTH);
                 ImageIcon scaledIcon = new ImageIcon(resizedImage);
@@ -50,7 +50,9 @@ public class BookDetailsDialogue extends JDialog {
                 buyButton = new JButton("Buy Now", scaledIcon);
 
             } else {
-                // Mesaje de eroare detaliate pentru a te ajuta să depanezi
+                //Gestionarea Erorilor:Dacă iconița nu este găsită (iconUrl == null), în loc să crape, afișează un mesaj
+                // de eroare foarte detaliat în consolă, explicând posibilele cauze
+                // (cale greșită, folderul resources neconfigurat în IDE etc.) și continuă prin a crea butonul fără iconiță.
                 System.err.println("--- DEBUGGING ICON ERROR ---");
                 System.err.println("EROARE: Iconița 'cart.png' nu a putut fi găsită.");
                 System.err.println("Cauze posibile:");

@@ -27,7 +27,7 @@ public class BookstoreFrame extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Panoul de sus pentru titlu și controale
+
         JPanel topPanel = new JPanel(new BorderLayout(0, 10));
         topPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5));
 
@@ -35,10 +35,10 @@ public class BookstoreFrame extends JFrame {
         titleLabel.setFont(new Font("Serif", Font.BOLD, 22));
         topPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Panou pentru controale (Căutare și Sortare)
+
         JPanel controlsPanel = new JPanel(new GridLayout(2, 1, 0, 5));
 
-        // NOU: Panoul pentru Căutare
+
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
         searchPanel.add(new JLabel("Search by Title/Author:"));
@@ -46,15 +46,15 @@ public class BookstoreFrame extends JFrame {
         searchPanel.add(searchField);
         controlsPanel.add(searchPanel);
 
-        // Panoul existent pentru Sortare
+
         JPanel sortPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         sortPanel.setBorder(BorderFactory.createTitledBorder("Sort Options"));
         sortPanel.add(new JLabel("Sort by:"));
         String[] sortOptions = {"Title", "Author", "Year", "Price", "Condition"};
         JComboBox<String> sortComboBox = new JComboBox<>(sortOptions);
         sortPanel.add(sortComboBox);
-        JRadioButton ascRadioButton = new JRadioButton("Ascending", true);
-        JRadioButton descRadioButton = new JRadioButton("Descending");
+        JRadioButton ascRadioButton = new JRadioButton("Ascending", true);//pentru ordonare ascendenta
+        JRadioButton descRadioButton = new JRadioButton("Descending");//pentru sortare descendenta
         ButtonGroup sortOrderGroup = new ButtonGroup();
         sortOrderGroup.add(ascRadioButton);
         sortOrderGroup.add(descRadioButton);
@@ -66,7 +66,7 @@ public class BookstoreFrame extends JFrame {
 
         topPanel.add(controlsPanel, BorderLayout.CENTER);
 
-        // Tabelul (cod existent)
+
         String[] columnNames = {"Title", "Author", "Year", "Condition", "Price (€)"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -90,7 +90,7 @@ public class BookstoreFrame extends JFrame {
             }
         });
 
-        // Butonul de întoarcere (cod existent)
+
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton backButton = new JButton("Return to Login");
         bottomPanel.add(backButton);
@@ -101,14 +101,13 @@ public class BookstoreFrame extends JFrame {
         add(new JScrollPane(table), BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
 
-        // Logica pentru controale
         sortButton.addActionListener(e -> {
             String sortBy = (String) sortComboBox.getSelectedItem();
             String sortOrder = ascRadioButton.isSelected() ? "ASC" : "DESC";
             loadSortedBookData(sortBy, sortOrder);
         });
 
-        // NOU: Listener pentru căutare în timp real
+
         searchField.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) { performSearch(); }
             public void removeUpdate(DocumentEvent e) { performSearch(); }
@@ -118,10 +117,11 @@ public class BookstoreFrame extends JFrame {
         // Încărcarea datelor inițiale
         loadInitialBookData();
     }
-
-    // NOU: Metoda care execută căutarea
+//Preia textul, apelează antiqueBookDAO.searchBooks(searchTerm) pentru a
+// obține o listă filtrată și actualizează instantaneu tabelul.
+// Dacă textul este gol, reîncarcă lista inițială.
     private void performSearch() {
-        String searchTerm = searchField.getText();
+        String searchTerm = searchField.getText();//DocumentListener
         if (searchTerm.trim().isEmpty()) {
             loadInitialBookData();
         } else {

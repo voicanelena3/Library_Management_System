@@ -35,11 +35,6 @@ public class AntiqueBookDAO {
         return books;
     }
 
-    /**
-     * NOU: Caută cărți după titlu sau autor.
-     * @param searchTerm Termenul de căutare.
-     * @return O listă de cărți care corespund căutării.
-     */
     public List<AntiqueBook> searchBooks(String searchTerm) {
         List<AntiqueBook> books = new ArrayList<>();
         // Folosim LIKE pentru a căuta substring-uri
@@ -61,7 +56,6 @@ public class AntiqueBookDAO {
         return books;
     }
 
-    // Metodele existente (sortare, ștergere) rămân aici...
     public List<AntiqueBook> getSortedAntiqueBooks(String sortBy, String sortOrder) {
         List<AntiqueBook> books = new ArrayList<>();
         String dbColumn;

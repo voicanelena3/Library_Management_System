@@ -107,16 +107,16 @@ public class BorrowerMainFrame extends JFrame {
         JButton viewBorrowedDatesButton = new JButton("View All Due Dates on Calendar");
         viewBorrowedDatesButton.addActionListener(e -> showAllBorrowedDatesOnCalendar());
 
-        // NEW: Logout Button
+
         JButton logoutButton = new JButton("Logout & Return to Login");
         logoutButton.addActionListener(e -> {
             dispose(); // Closes the current BorrowerMainFrame window
             new LoginFrame().setVisible(true); // Creates and shows a new LoginFrame
         });
 
-        // Add both buttons to the panel
+
         actionPanel.add(viewBorrowedDatesButton);
-        actionPanel.add(logoutButton); // Add the new button
+        actionPanel.add(logoutButton);
 
         return actionPanel;
     }

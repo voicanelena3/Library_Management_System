@@ -4,7 +4,7 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.io.Serializable;
-
+//Java Architecture for XML Binding
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class Person implements Serializable {

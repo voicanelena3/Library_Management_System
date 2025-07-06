@@ -17,10 +17,10 @@ import java.util.List;
 
 public class BorrowerXMLHandler {
 
-    @XmlRootElement(name = "borrowers")
+    @XmlRootElement(name = "borrowers")//marks a Java class as the root element of an XML document
     private static class BorrowersWrapper {
         private List<Borrower> borrowers;
-        @XmlElement(name = "borrower")
+        @XmlElement(name = "borrower")//sed to map a field or property in a Java class to an individual XML element
         public List<Borrower> getBorrowers() {
             return borrowers;
         }

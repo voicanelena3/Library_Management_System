@@ -30,6 +30,9 @@ public class LibrarianMainFrame extends JFrame {
     private DefaultTableModel loanTableModel;
     private JTable loanTable;
 
+    private static final String BOOKS_FILE_PATH = "books.xml";
+
+
     private List<Book> allBooks = new ArrayList<>();
     private List<Borrower> allBorrowers = new ArrayList<>();
 
@@ -92,30 +95,40 @@ public class LibrarianMainFrame extends JFrame {
 
     private void loadAllData() {
         try {
+            // Încarcă cărți din fișierul XML
+            File booksFile = new File(BOOKS_FILE_PATH);
+            if (booksFile.exists()) {
+                allBooks = BookXMLHandler.loadAll(BOOKS_FILE_PATH);
+                System.out.println("DEBUG: Loaded " + allBooks.size() + " books from books.xml.");
+            } else {
+                // Opțional: Adaugă cărți default dacă fișierul nu există la prima rulare
+                allBooks = new ArrayList<>();
+                allBooks.add(new Book(104, "To Kill a Mockingbird", "Harper Lee", "Fiction"));
+                JOptionPane.showMessageDialog(this, "books.xml not found. Starting with default book list.", "Warning", JOptionPane.WARNING_MESSAGE);
+            }
 
-            allBooks = new ArrayList<>();
-            allBooks.add(new Book(104, "To Kill a Mockingbird", "Harper Lee", "Fiction"));
-            allBooks.add(new Book(105, "The Great Gatsby", "F. Scott Fitzgerald", "Classic"));
-            allBooks.add(new Book(106, "Dune", "Frank Herbert", "Science Fiction"));
-            System.out.println("DEBUG: Loaded " + allBooks.size() + " hardcoded books.");
-
-            //Incarca borroweri din fisier
+            // Încarcă cititori din fișier (codul existent)
             File borrowersFile = new File(BORROWERS_FILE_PATH);
             if (borrowersFile.exists()) {
                 allBorrowers = BorrowerXMLHandler.loadAll(BORROWERS_FILE_PATH);
             } else {
-                JOptionPane.showMessageDialog(this, "borrowers.xml not found in project root. Starting with empty list.", "Warning", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "borrowers.xml not found. Starting with empty list.", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage(), "Data Load Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();//Printează în consolă întreaga poveste a modului în care s-a produs eroarea
+            e.printStackTrace();
         }
     }
-
     private void saveAllData() {
         try {
+            // Salvează cărțile
+            BookXMLHandler.saveAll(allBooks, BOOKS_FILE_PATH);
+            System.out.println("Book data saved successfully to project root.");
+
+            // Salvează cititorii (codul existent)
             BorrowerXMLHandler.saveAll(allBorrowers, BORROWERS_FILE_PATH);
             System.out.println("Borrower data saved successfully to project root.");
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error saving data: " + e.getMessage(), "Save Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -210,7 +223,7 @@ public class LibrarianMainFrame extends JFrame {
                 authorField.setText("");
                 genreField.setText("");
 
-                JOptionPane.showMessageDialog(this, "Book added to the in-memory list. Changes will be lost on exit.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Book added to the in-memory list", "Success", JOptionPane.INFORMATION_MESSAGE);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid numeric ID for the book.", "Input Error", JOptionPane.ERROR_MESSAGE);
             }

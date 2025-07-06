@@ -190,4 +190,14 @@
         <role>Borrower</role>
         <borrowedLoans/>
     </borrower>
+    <borrower>
+        <id>8</id>
+        <name>cineva2</name>
+        <password>1</password>
+        <address>1</address>
+        <phoneNumber>11</phoneNumber>
+        <email>1</email>
+        <role>Borrower</role>
+        <borrowedLoans/>
+    </borrower>
 </borrowers>

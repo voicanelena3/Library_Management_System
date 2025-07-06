@@ -28,4 +28,11 @@
         <genre>1</genre>
         <isBorrowed>false</isBorrowed>
     </book>
+    <book>
+        <bookID>109</bookID>
+        <title>2</title>
+        <author>2</author>
+        <genre>2</genre>
+        <isBorrowed>false</isBorrowed>
+    </book>
 </books>

@@ -17,7 +17,7 @@ public class BookstoreFrame extends JFrame {
     private JTable table;
     private AntiqueBookDAO antiqueBookDAO;
     private List<AntiqueBook> currentBooks;
-    private JTextField searchField; // NOU: Câmpul de căutare
+    private JTextField searchField;
 
     public BookstoreFrame() {
         this.antiqueBookDAO = new AntiqueBookDAO();

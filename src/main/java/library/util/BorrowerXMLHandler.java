@@ -17,9 +17,6 @@ import java.util.List;
 
 public class BorrowerXMLHandler {
 
-    /**
-     * Helper class for JAXB to wrap the list, creating a <borrowers> root element.
-     */
     @XmlRootElement(name = "borrowers")
     private static class BorrowersWrapper {
         private List<Borrower> borrowers;
@@ -33,11 +30,6 @@ public class BorrowerXMLHandler {
         }
     }
 
-    /**
-     * Loads a list of Borrower objects from an XML file path.
-     * @param filename The path to the XML file.
-     * @return A list of borrowers, or an empty list on error.
-     */
     public static List<Borrower> loadAll(String filename) {
         try {
             File file = new File(filename);
@@ -52,11 +44,6 @@ public class BorrowerXMLHandler {
         }
     }
 
-    /**
-     * Loads a list of Borrower objects from an XML resource stream.
-     * @param inputStream The InputStream to read the XML from.
-     * @return A list of borrowers, or an empty list on error.
-     */
     public static List<Borrower> loadAll(InputStream inputStream) {
         if (inputStream == null) {
             System.err.println("Input stream for borrowers.xml is null. Resource not found.");
@@ -74,13 +61,6 @@ public class BorrowerXMLHandler {
         }
     }
 
-    /**
-     * NEW METHOD: Saves a list of Borrower objects to a specified XML file.
-     *
-     * @param borrowers The list of borrowers to save.
-     * @param filename  The path of the file to save to.
-     * @throws JAXBException if an error occurs during the XML saving process.
-     */
     public static void saveAll(List<Borrower> borrowers, String filename) throws JAXBException {
         BorrowersWrapper wrapper = new BorrowersWrapper();
         wrapper.setBorrowers(borrowers);

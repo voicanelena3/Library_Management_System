@@ -21,20 +21,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Stream;
 
-/**
- * A utility class for generating PDF reports using the iText library.
- */
+
 public class ReportGenerator {
 
     private static final Font TITLE_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
     private static final Font HEADER_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    /**
-     * Creates a PDF report of all books in the library.
-     * @param books The list of books to include in the report.
-     * @param filePath The path where the PDF file will be saved.
-     */
+
     public static void generateBooksReport(List<Book> books, String filePath) {
         Document document = new Document(PageSize.A4);
         try {
@@ -74,11 +68,7 @@ public class ReportGenerator {
         }
     }
 
-    /**
-     * Creates a PDF report of all registered borrowers.
-     * @param borrowers The list of borrowers to include.
-     * @param filePath The path where the PDF file will be saved.
-     */
+
     public static void generateBorrowersReport(List<Borrower> borrowers, String filePath) {
         Document document = new Document(PageSize.A4);
         try {
@@ -120,11 +110,7 @@ public class ReportGenerator {
         }
     }
 
-    /**
-     * Creates a PDF report of all loans (active and historical).
-     * @param borrowers The list of all borrowers, containing their loans.
-     * @param filePath The path where the PDF will be saved.
-     */
+
     public static void generateLoansReport(List<Borrower> borrowers, String filePath) {
         Document document = new Document(PageSize.A4.rotate()); // Use landscape for more columns
         try {

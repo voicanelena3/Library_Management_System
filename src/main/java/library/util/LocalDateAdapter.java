@@ -4,10 +4,7 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException; // Import this
 
-/**
- * XmlAdapter for marshalling/unmarshalling LocalDate objects to/from XML strings.
- * JAXB doesn't have built-in support for java.time.LocalDate, so a custom adapter is needed.
- */
+
 public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
 
     @Override

@@ -12,12 +12,6 @@ import java.util.List;
 
 public class BorrowingRecordXMLHandler {
 
-    /**
-     * Loads all borrowing records from an XML file.
-     *
-     * @param filePath The path to the XML file.
-     * @return A list of BorrowingRecord objects.
-     */
     public static List<BorrowingRecord> loadAll(String filePath) {
         try {
             File xmlFile = new File(filePath);
@@ -39,12 +33,7 @@ public class BorrowingRecordXMLHandler {
         }
     }
 
-    /**
-     * Saves a list of borrowing records to an XML file.
-     *
-     * @param records The list of records to save.
-     * @param filePath The path to the XML file.
-     */
+
     public static void saveAll(List<BorrowingRecord> records, String filePath) {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(BorrowingRecordList.class);

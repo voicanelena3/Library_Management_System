@@ -21,7 +21,7 @@ public class Main {
         }
 
         // Schedule the creation of the GUI on the Event Dispatch Thread
-        SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(() -> {//entru a se asigura că interfața grafică este creată și afișată pe thread-ul dedicat ei, numit Event Dispatch Thread (EDT)
             new LoginFrame().setVisible(true);
         });
     }
